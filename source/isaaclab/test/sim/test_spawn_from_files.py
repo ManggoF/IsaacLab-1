@@ -43,7 +43,6 @@ def sim():
     sim.clear_instance()
 
 
-@pytest.mark.isaacsim_ci
 def test_spawn_usd(sim):
     """Test loading prim from Usd file."""
     # Spawn cone
@@ -55,7 +54,6 @@ def test_spawn_usd(sim):
     assert prim.GetPrimTypeInfo().GetTypeName() == "Xform"
 
 
-@pytest.mark.isaacsim_ci
 def test_spawn_usd_fails(sim):
     """Test loading prim from Usd file fails when asset usd path is invalid."""
     # Spawn cone
@@ -65,7 +63,6 @@ def test_spawn_usd_fails(sim):
         cfg.func("/World/Franka", cfg)
 
 
-@pytest.mark.isaacsim_ci
 def test_spawn_urdf(sim):
     """Test loading prim from URDF file."""
     # retrieve path to urdf importer extension
@@ -86,7 +83,6 @@ def test_spawn_urdf(sim):
     assert prim.GetPrimTypeInfo().GetTypeName() == "Xform"
 
 
-@pytest.mark.isaacsim_ci
 def test_spawn_ground_plane(sim):
     """Test loading prim for the ground plane from grid world USD."""
     # Spawn ground plane

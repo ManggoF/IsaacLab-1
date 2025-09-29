@@ -73,13 +73,12 @@ class FeatureExtractor:
     If the train flag is set to True, the CNN is trained during the rollout process.
     """
 
-    def __init__(self, cfg: FeatureExtractorCfg, device: str, log_dir: str | None = None):
+    def __init__(self, cfg: FeatureExtractorCfg, device: str):
         """Initialize the feature extractor model.
 
         Args:
-            cfg: Configuration for the feature extractor model.
-            device: Device to run the model on.
-            log_dir: Directory to save checkpoints. If None, uses local "logs" folder resolved with respect to this file.
+            cfg (FeatureExtractorCfg): Configuration for the feature extractor model.
+            device (str): Device to run the model on.
         """
 
         self.cfg = cfg
@@ -90,10 +89,7 @@ class FeatureExtractor:
         self.feature_extractor.to(self.device)
 
         self.step_count = 0
-        if log_dir is not None:
-            self.log_dir = log_dir
-        else:
-            self.log_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "logs")
+        self.log_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "logs")
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
 

@@ -209,7 +209,6 @@ def sim():
     sim.clear_instance()
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs_without_inertial_decoupling(sim):
     """Test absolute pose control with fixed impedance and without inertial dynamics decoupling."""
     (
@@ -258,7 +257,6 @@ def test_franka_pose_abs_without_inertial_decoupling(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs_with_partial_inertial_decoupling(sim):
     """Test absolute pose control with fixed impedance and partial inertial dynamics decoupling."""
     (
@@ -308,7 +306,6 @@ def test_franka_pose_abs_with_partial_inertial_decoupling(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs_fixed_impedance_with_gravity_compensation(sim):
     """Test absolute pose control with fixed impedance, gravity compensation, and inertial dynamics decoupling."""
     (
@@ -359,7 +356,6 @@ def test_franka_pose_abs_fixed_impedance_with_gravity_compensation(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs(sim):
     """Test absolute pose control with fixed impedance and inertial dynamics decoupling."""
     (
@@ -409,7 +405,6 @@ def test_franka_pose_abs(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_rel(sim):
     """Test relative pose control with fixed impedance and inertial dynamics decoupling."""
     (
@@ -459,7 +454,6 @@ def test_franka_pose_rel(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs_variable_impedance(sim):
     """Test absolute pose control with variable impedance and inertial dynamics decoupling."""
     (
@@ -507,7 +501,6 @@ def test_franka_pose_abs_variable_impedance(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_wrench_abs_open_loop(sim):
     """Test open loop absolute force control."""
     (
@@ -588,7 +581,6 @@ def test_franka_wrench_abs_open_loop(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_wrench_abs_closed_loop(sim):
     """Test closed loop absolute force control."""
     (
@@ -677,7 +669,6 @@ def test_franka_wrench_abs_closed_loop(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_hybrid_decoupled_motion(sim):
     """Test hybrid control with fixed impedance and partial inertial dynamics decoupling."""
     (
@@ -753,7 +744,6 @@ def test_franka_hybrid_decoupled_motion(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_hybrid_variable_kp_impedance(sim):
     """Test hybrid control with variable kp impedance and inertial dynamics decoupling."""
     (
@@ -828,7 +818,6 @@ def test_franka_hybrid_variable_kp_impedance(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_taskframe_pose_abs(sim):
     """Test absolute pose control in task frame with fixed impedance and inertial dynamics decoupling."""
     (
@@ -879,7 +868,6 @@ def test_franka_taskframe_pose_abs(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_taskframe_pose_rel(sim):
     """Test relative pose control in task frame with fixed impedance and inertial dynamics decoupling."""
     (
@@ -930,7 +918,6 @@ def test_franka_taskframe_pose_rel(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_taskframe_hybrid(sim):
     """Test hybrid control in task frame with fixed impedance and inertial dynamics decoupling."""
     (
@@ -1007,7 +994,6 @@ def test_franka_taskframe_hybrid(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs_without_inertial_decoupling_with_nullspace_centering(sim):
     """Test absolute pose control with fixed impedance and nullspace centerin but without inertial decoupling."""
     (
@@ -1057,7 +1043,6 @@ def test_franka_pose_abs_without_inertial_decoupling_with_nullspace_centering(si
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs_with_partial_inertial_decoupling_nullspace_centering(sim):
     """Test absolute pose control with fixed impedance, partial inertial decoupling and nullspace centering."""
     (
@@ -1108,7 +1093,6 @@ def test_franka_pose_abs_with_partial_inertial_decoupling_nullspace_centering(si
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_pose_abs_with_nullspace_centering(sim):
     """Test absolute pose control with fixed impedance, inertial decoupling and nullspace centering."""
     (
@@ -1159,7 +1143,6 @@ def test_franka_pose_abs_with_nullspace_centering(sim):
     )
 
 
-@pytest.mark.isaacsim_ci
 def test_franka_taskframe_hybrid_with_nullspace_centering(sim):
     """Test hybrid control in task frame with fixed impedance, inertial decoupling and nullspace centering."""
     (

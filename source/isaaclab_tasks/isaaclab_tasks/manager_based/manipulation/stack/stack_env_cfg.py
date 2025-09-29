@@ -18,8 +18,10 @@ from isaaclab.sensors.frame_transformer.frame_transformer_cfg import FrameTransf
 from isaaclab.sim.spawners.from_files.from_files_cfg import GroundPlaneCfg, UsdFileCfg
 from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
+from isaaclab.managers import RewardTermCfg as RewTerm
 
 from . import mdp
+from . import custom_mdp as cusmdp
 
 
 ##
@@ -90,7 +92,7 @@ class ObservationsCfg:
 
         def __post_init__(self):
             self.enable_corruption = False
-            self.concatenate_terms = False
+            self.concatenate_terms = True  # 告诉环境把 policy 组里的所有观测张量拼成一个 1-D 向量
 
     @configclass
     class RGBCameraPolicyCfg(ObsGroup):
@@ -131,7 +133,7 @@ class ObservationsCfg:
 
         def __post_init__(self):
             self.enable_corruption = False
-            self.concatenate_terms = False
+            self.concatenate_terms = False 
 
     # observation groups
     policy: PolicyCfg = PolicyCfg()
@@ -159,6 +161,56 @@ class TerminationsCfg:
 
     success = DoneTerm(func=mdp.cubes_stacked)
 
+# =================================================================
+#           <<<<< 全新的、更精细的稠密奖励函数配置 >>>>>
+# =================================================================
+# 文件: stack_env_cfg.py
+
+@configclass
+class RewardsCfg:
+    """
+    重新平衡安全惩罚和塑形奖励，鼓励智能体在保证安全的前提下进行探索。
+    """
+    # 核心塑形奖励
+    shaping = RewTerm(
+        func=cusmdp.phased_stacking_reward,
+        weight=1.0,
+        params={
+            "robot_cfg": SceneEntityCfg("robot"),
+            "ee_frame_cfg": SceneEntityCfg("ee_frame"),
+            "object_cfg": SceneEntityCfg("cube_2"),
+            "lower_object_cfg": SceneEntityCfg("cube_1"),
+            # -- 增强塑形奖励的权重，让目标更具吸引力 --
+            "xy_dist_weight": 2.5,          # <-- 从 1.0 增加
+            "z_dist_weight": 3.0,           # <-- 从 1.5 增加
+            "gripper_penalty_weight": 2.0,  # <-- 从 0.8 增加
+            "stack_dist_weight": 5.0,       # <-- 从 2.5 增加 (抓取后的奖励应该最高)
+            # 几何参数
+            "lift_h": 0.02,
+            "hover_height": 0.1,
+            "xy_align_thresh": 0.04,
+            "top_clearance": 0.03,
+        }
+    )
+
+    # 对末端执行器高度过低的持续性惩罚
+    ee_safety_penalty = RewTerm(
+        func=cusmdp.ee_height_penalty,
+        weight=1.0,
+        params={
+            "ee_frame_cfg": SceneEntityCfg("ee_frame"),
+            "min_height": 0.03, # 3cm作为安全线，为2.5cm的抓取点留出 buffer
+            # -- 大幅降低惩罚权重，使其不再是压倒性的 --
+            "penalty_weight": 8.0  # <-- 从 50.0 大幅降低到一个合理的“警告”级别
+        }
+    )
+
+    # 任务完全成功的最终巨大奖励
+    stack_success_bonus = RewTerm(func=mdp.cubes_stacked, weight=200.0)
+
+    # 正则化惩罚
+    action_regularization = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
+    joint_velocity_regularization = RewTerm(func=mdp.joint_vel_l2, weight=-0.0005, params={"asset_cfg": SceneEntityCfg("robot")})
 
 @configclass
 class StackEnvCfg(ManagerBasedRLEnvCfg):
@@ -174,7 +226,7 @@ class StackEnvCfg(ManagerBasedRLEnvCfg):
 
     # Unused managers
     commands = None
-    rewards = None
+    rewards: RewardsCfg = RewardsCfg()
     events = None
     curriculum = None
 

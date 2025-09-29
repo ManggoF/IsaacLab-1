@@ -3,15 +3,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Package containing task implementations for various robotic environments.
-
-The package is structured as follows:
-
-- ``direct``: These include single-file implementations of tasks.
-- ``manager_based``: These include task implementations that use the manager-based API.
-- ``utils``: These include utility functions for the tasks.
-
-"""
+"""Package containing task implementations for various robotic environments."""
 
 import os
 import toml

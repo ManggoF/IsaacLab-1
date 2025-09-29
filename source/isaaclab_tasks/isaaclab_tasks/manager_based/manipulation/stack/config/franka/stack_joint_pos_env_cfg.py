@@ -59,13 +59,15 @@ class EventCfg:
 
 @configclass
 class FrankaCubeStackEnvCfg(StackEnvCfg):
-
     def __post_init__(self):
         # post init of parent
         super().__post_init__()
 
         # Set events
         self.events = EventCfg()
+
+        # 告诉环境把 policy 组里的所有观测张量拼成一个 1-D 向量
+        # self.observations.policy.concatenate_terms = True
 
         # Set Franka as robot
         self.scene.robot = FRANKA_PANDA_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
@@ -87,10 +89,6 @@ class FrankaCubeStackEnvCfg(StackEnvCfg):
             open_command_expr={"panda_finger_.*": 0.04},
             close_command_expr={"panda_finger_.*": 0.0},
         )
-        # utilities for gripper status check
-        self.gripper_joint_names = ["panda_finger_.*"]
-        self.gripper_open_val = 0.04
-        self.gripper_threshold = 0.005
 
         # Rigid body properties of each cube
         cube_properties = RigidBodyPropertiesCfg(

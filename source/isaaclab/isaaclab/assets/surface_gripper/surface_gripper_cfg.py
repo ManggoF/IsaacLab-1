@@ -7,15 +7,12 @@ from dataclasses import MISSING
 
 from isaaclab.utils import configclass
 
-from ..asset_base_cfg import AssetBaseCfg
-from .surface_gripper import SurfaceGripper
-
 
 @configclass
-class SurfaceGripperCfg(AssetBaseCfg):
+class SurfaceGripperCfg:
     """Configuration parameters for a surface gripper actuator."""
 
-    prim_path: str = MISSING
+    prim_expr: str = MISSING
     """The expression to find the grippers in the stage."""
 
     max_grip_distance: float | None = None
@@ -29,5 +26,3 @@ class SurfaceGripperCfg(AssetBaseCfg):
 
     retry_interval: float | None = None
     """The amount of time the gripper will spend trying to grasp an object."""
-
-    class_type: type = SurfaceGripper

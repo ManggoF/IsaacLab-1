@@ -138,8 +138,7 @@ class InteractiveScene:
         self.env_prim_paths = self.cloner.generate_paths(f"{self.env_ns}/env", self.cfg.num_envs)
         # create source prim
         self.stage.DefinePrim(self.env_prim_paths[0], "Xform")
-        # allocate env indices
-        self._ALL_INDICES = torch.arange(self.cfg.num_envs, dtype=torch.long, device=self.device)
+
         # when replicate_physics=False, we assume heterogeneous environments and clone the xforms first.
         # this triggers per-object level cloning in the spawner.
         if not self.cfg.replicate_physics:
@@ -421,7 +420,7 @@ class InteractiveScene:
             These are not reset or updated by the scene. They are mainly other prims that are not necessarily
             handled by the interactive scene, but are useful to be accessed by the user.
 
-        .. _XFormPrim: https://docs.isaacsim.omniverse.nvidia.com/latest/py/source/extensions/isaacsim.core.prims/docs/index.html#isaacsim.core.prims.XFormPrim
+        .. _XFormPrim: https://docs.omniverse.nvidia.com/py/isaacsim/source/isaacsim.core/docs/index.html#isaacsim.core.prims.XFormPrim
 
         """
         return self._extras
@@ -516,7 +515,7 @@ class InteractiveScene:
         """
         # resolve env_ids
         if env_ids is None:
-            env_ids = self._ALL_INDICES
+            env_ids = slice(None)
         # articulations
         for asset_name, articulation in self._articulations.items():
             asset_state = state["articulation"][asset_name]
@@ -554,9 +553,9 @@ class InteractiveScene:
             rigid_object.write_root_pose_to_sim(root_pose, env_ids=env_ids)
             rigid_object.write_root_velocity_to_sim(root_velocity, env_ids=env_ids)
         # surface grippers
-        for asset_name, surface_gripper in self._surface_grippers.items():
+        for asset_name, gripper in self._surface_grippers.items():
             asset_state = state["gripper"][asset_name]
-            surface_gripper.set_grippers_command(asset_state)
+            gripper.write_gripper_state_to_sim(asset_state, env_ids=env_ids)
 
         # write data to simulation to make sure initial state is set
         # this propagates the joint targets to the simulation
@@ -643,10 +642,6 @@ class InteractiveScene:
                 asset_state["root_pose"][:, :3] -= self.env_origins
             asset_state["root_velocity"] = rigid_object.data.root_vel_w.clone()
             state["rigid_object"][asset_name] = asset_state
-        # surface grippers
-        state["gripper"] = dict()
-        for asset_name, gripper in self._surface_grippers.items():
-            state["gripper"][asset_name] = gripper.state.clone()
         return state
 
     """
@@ -753,8 +748,7 @@ class InteractiveScene:
                         asset_paths = sim_utils.find_matching_prim_paths(rigid_object_cfg.prim_path)
                         self._global_prim_paths += asset_paths
             elif isinstance(asset_cfg, SurfaceGripperCfg):
-                # add surface grippers to scene
-                self._surface_grippers[asset_name] = asset_cfg.class_type(asset_cfg)
+                pass
             elif isinstance(asset_cfg, SensorBaseCfg):
                 # Update target frame path(s)' regex name space for FrameTransformer
                 if isinstance(asset_cfg, FrameTransformerCfg):

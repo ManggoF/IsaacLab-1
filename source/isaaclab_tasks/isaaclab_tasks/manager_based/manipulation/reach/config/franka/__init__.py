@@ -27,6 +27,7 @@ gym.register(
     },
 )
 
+
 gym.register(
     id="Isaac-Reach-Franka-Play-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
@@ -49,6 +50,7 @@ gym.register(
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     kwargs={
         "env_cfg_entry_point": f"{__name__}.ik_abs_env_cfg:FrankaReachEnvCfg",
+        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:FrankaReachPPORunnerCfg",
     },
     disable_env_checker=True,
 )
@@ -62,6 +64,7 @@ gym.register(
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     kwargs={
         "env_cfg_entry_point": f"{__name__}.ik_rel_env_cfg:FrankaReachEnvCfg",
+        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:FrankaReachPPORunnerCfg",
     },
     disable_env_checker=True,
 )

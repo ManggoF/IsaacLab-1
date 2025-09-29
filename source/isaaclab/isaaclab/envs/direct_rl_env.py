@@ -376,6 +376,9 @@ class DirectRLEnv(gym.Env):
         reset_env_ids = self.reset_buf.nonzero(as_tuple=False).squeeze(-1)
         if len(reset_env_ids) > 0:
             self._reset_idx(reset_env_ids)
+            # update articulation kinematics
+            self.scene.write_data_to_sim()
+            self.sim.forward()
             # if sensors are added to the scene, make sure we render to reflect changes in reset
             if self.sim.has_rtx_sensors() and self.cfg.rerender_on_reset:
                 self.sim.render()
@@ -422,7 +425,7 @@ class DirectRLEnv(gym.Env):
         By convention, if mode is:
 
         - **human**: Render to the current display and return nothing. Usually for human consumption.
-        - **rgb_array**: Return a numpy.ndarray with shape (x, y, 3), representing RGB values for an
+        - **rgb_array**: Return an numpy.ndarray with shape (x, y, 3), representing RGB values for an
           x-by-y pixel image, suitable for turning into a video.
 
         Args:

@@ -5,7 +5,6 @@
 
 # isort: off
 import warnings
-import pytest
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 # isort: on
@@ -14,7 +13,6 @@ import numpy as np
 import scipy.interpolate as interpolate
 
 
-@pytest.mark.isaacsim_ci
 def test_interpolation():
     """Test scipy interpolation 2D method."""
     # parameters

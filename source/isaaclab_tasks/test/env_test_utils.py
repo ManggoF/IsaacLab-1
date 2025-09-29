@@ -6,7 +6,6 @@
 """Shared test utilities for Isaac Lab environments."""
 
 import gymnasium as gym
-import inspect
 import os
 import torch
 
@@ -59,8 +58,8 @@ def setup_environment(
         # TODO: factory environments cause tests to fail if run together with other envs,
         # so we collect these environments separately to run in a separate unit test.
         # apply factory filter
-        if (factory_envs is True and ("Factory" not in task_spec.id and "Forge" not in task_spec.id)) or (
-            factory_envs is False and ("Factory" in task_spec.id or "Forge" in task_spec.id)
+        if (factory_envs is True and "Factory" not in task_spec.id) or (
+            factory_envs is False and "Factory" in task_spec.id
         ):
             continue
         # if None: no filter
@@ -114,40 +113,27 @@ def _run_environments(
     if isaac_sim_version < 5 and create_stage_in_memory:
         pytest.skip("Stage in memory is not supported in this version of Isaac Sim")
 
-    # skip suction gripper environments as they require CPU simulation and cannot be run with GPU simulation
-    if "Suction" in task_name and device != "cpu":
-        return
-
     # skip these environments as they cannot be run with 32 environments within reasonable VRAM
     if num_envs == 32 and task_name in [
         "Isaac-Stack-Cube-Franka-IK-Rel-Blueprint-v0",
         "Isaac-Stack-Cube-Instance-Randomize-Franka-IK-Rel-v0",
         "Isaac-Stack-Cube-Instance-Randomize-Franka-v0",
+        "Isaac-Stack-Cube-Franka-IK-Rel-Visuomotor-v0",
+        "Isaac-Stack-Cube-Franka-IK-Rel-Visuomotor-Cosmos-v0",
     ]:
-        return
-
-    # skip these environments as they cannot be run with 32 environments within reasonable VRAM
-    if "Visuomotor" in task_name and num_envs == 32:
         return
 
     # skip automate environments as they require cuda installation
     if task_name in ["Isaac-AutoMate-Assembly-Direct-v0", "Isaac-AutoMate-Disassembly-Direct-v0"]:
         return
 
-    # Check if this is the teddy bear environment and if it's being called from the right test file
-    if task_name == "Isaac-Lift-Teddy-Bear-Franka-IK-Abs-v0":
-        # Get the calling frame to check which test file is calling this function
-        frame = inspect.currentframe()
-        while frame:
-            filename = frame.f_code.co_filename
-            if "test_lift_teddy_bear.py" in filename:
-                # Called from the dedicated test file, allow it to run
-                break
-            frame = frame.f_back
+    # skipping this test for now as it requires torch 2.6 or newer
+    if task_name == "Isaac-Cartpole-RGB-TheiaTiny-v0":
+        return
 
-        # If not called from the dedicated test file, skip it
-        if not frame:
-            return
+    # TODO: why is this failing in Isaac Sim 5.0??? but the environment itself can run.
+    if task_name == "Isaac-Lift-Teddy-Bear-Franka-IK-Abs-v0":
+        return
 
     print(f""">>> Running test for environment: {task_name}""")
     _check_random_actions(

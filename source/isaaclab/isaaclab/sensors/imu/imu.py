@@ -219,7 +219,7 @@ class Imu(SensorBase):
         # set visibility of markers
         # note: parent only deals with callbacks. not their visibility
         if debug_vis:
-            # create markers if necessary for the first time
+            # create markers if necessary for the first tome
             if not hasattr(self, "acceleration_visualizer"):
                 self.acceleration_visualizer = VisualizationMarkers(self.cfg.visualizer_cfg)
             # set their visibility to true

@@ -14,10 +14,9 @@ class ShadowHandPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     max_iterations = 10000
     save_interval = 250
     experiment_name = "shadow_hand"
+    empirical_normalization = True
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
-        actor_obs_normalization=True,
-        critic_obs_normalization=True,
         actor_hidden_dims=[512, 512, 256, 128],
         critic_hidden_dims=[512, 512, 256, 128],
         activation="elu",
@@ -44,10 +43,9 @@ class ShadowHandAsymFFPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     max_iterations = 10000
     save_interval = 250
     experiment_name = "shadow_hand_openai_ff"
+    empirical_normalization = True
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
-        actor_obs_normalization=True,
-        critic_obs_normalization=True,
         actor_hidden_dims=[400, 400, 200, 100],
         critic_hidden_dims=[512, 512, 256, 128],
         activation="elu",
@@ -74,10 +72,9 @@ class ShadowHandVisionFFPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     max_iterations = 50000
     save_interval = 250
     experiment_name = "shadow_hand_vision"
+    empirical_normalization = True
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
-        actor_obs_normalization=True,
-        critic_obs_normalization=True,
         actor_hidden_dims=[1024, 512, 512, 256, 128],
         critic_hidden_dims=[1024, 512, 512, 256, 128],
         activation="elu",

@@ -65,8 +65,7 @@ class ShadowHandVisionEnv(InHandManipulationEnv):
 
     def __init__(self, cfg: ShadowHandVisionEnvCfg, render_mode: str | None = None, **kwargs):
         super().__init__(cfg, render_mode, **kwargs)
-        # Use the log directory from the configuration
-        self.feature_extractor = FeatureExtractor(self.cfg.feature_extractor, self.device, self.cfg.log_dir)
+        self.feature_extractor = FeatureExtractor(self.cfg.feature_extractor, self.device)
         # hide goal cubes
         self.goal_pos[:, :] = torch.tensor([-0.2, 0.1, 0.6], device=self.device)
         # keypoints buffer

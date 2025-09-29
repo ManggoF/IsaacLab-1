@@ -174,7 +174,6 @@ def setup_sim():
     sim.clear_instance()
 
 
-@pytest.mark.isaacsim_ci
 def test_constant_velocity(setup_sim):
     """Test the Imu sensor with a constant velocity.
 
@@ -263,7 +262,6 @@ def test_constant_velocity(setup_sim):
         prev_ang_acc_cube = scene.sensors["imu_cube"].data.ang_acc_b.clone()
 
 
-@pytest.mark.isaacsim_ci
 def test_constant_acceleration(setup_sim):
     """Test the Imu sensor with a constant acceleration."""
     sim, scene = setup_sim
@@ -307,7 +305,6 @@ def test_constant_acceleration(setup_sim):
         )
 
 
-@pytest.mark.isaacsim_ci
 def test_single_dof_pendulum(setup_sim):
     """Test imu against analytical pendulum problem."""
     sim, scene = setup_sim
@@ -441,7 +438,6 @@ def test_single_dof_pendulum(setup_sim):
         )
 
 
-@pytest.mark.isaacsim_ci
 def test_offset_calculation(setup_sim):
     """Test offset configuration argument."""
     sim, scene = setup_sim
@@ -516,7 +512,6 @@ def test_offset_calculation(setup_sim):
         )
 
 
-@pytest.mark.isaacsim_ci
 def test_env_ids_propagation(setup_sim):
     """Test that env_ids argument propagates through update and reset methods"""
     sim, scene = setup_sim
@@ -547,7 +542,6 @@ def test_env_ids_propagation(setup_sim):
     scene.update(sim.get_physics_dt())
 
 
-@pytest.mark.isaacsim_ci
 def test_sensor_print(setup_sim):
     """Test sensor print is working correctly."""
     sim, scene = setup_sim
